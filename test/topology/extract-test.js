@@ -133,6 +133,39 @@ suite.addBatch({
           }]
         }]
       });
+    },
+    "equivalence classes of lines and rings by parent geometry": function() {
+      var topology = extract({
+        line: {
+          type: "LineString",
+          coordinates: [[0, 0], [1, 0], [2, 0]]
+        },
+        multiline: {
+          type: "MultiLineString",
+          coordinates: [[[0, 0], [1, 0], [2, 0]],[[0, 0], [1, 0], [2, 0]]]
+        },
+        polygon: {
+          type: "Polygon",
+          coordinates: [[[0, 0], [1, 0], [2, 0], [0, 0]]]
+        },
+        multipoly: {
+          type: "MultiPolygon",
+          coordinates: [[[0, 0], [1, 0], [2, 0], [0, 0]], [[0, 0], [1, 0], [2, 0], [0, 0]]]
+        },
+        collection: {
+          type: "GeometryCollection",
+          geometries: [{
+              type: "LineString",
+              coordinates: [[0, 0], [1, 0], [2, 0]]
+            }, {
+              type: "LineString",
+              coordinates: [[0, 0], [1, 0], [2, 0]]
+            }
+          ]
+        }
+      });
+      assert.deepEqual(topology.lineGeoms, [0, 1, 3, 4, 5]);
+      assert.deepEqual(topology.ringGeoms, [0, 1, 3]);
     }
   }
 });
